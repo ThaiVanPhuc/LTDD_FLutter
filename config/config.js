@@ -1,39 +1,22 @@
 // Import các thư viện cần thiết
-const express = require('express');
-const bodyParser = require('body-parser');
-const { Sequelize } = require('sequelize');
+const express = require("express");
+const bodyParser = require("body-parser");
+const { Sequelize } = require("sequelize");
 
 // Cấu hình chung cho cơ sở dữ liệu và server
 const config = {
   database: {
-    name: 'fellow4U',  
-    username: 'root',   
-    password: '',
-    host: 'localhost', 
-    dialect: 'mysql',
-    logging: console.log
+    name: "fellow4U",
+    username: "root",
+    password: "",
+    host: "localhost",
+    dialect: "mysql",
+    logging: console.log,
   },
   server: {
-    port: 5000
-  }
+    port: 5000,
+  },
 };
-
-// TODO : Connect to db4free.net ST22B
-// LTDD:....
-// const config = {
-//   database: {
-//     name: 'taquocynckh',
-//     username: 'taquocy',
-//     password: 'Y649394$y',
-//     host: 'db4free.net',
-//     dialect: 'mysql',
-//     logging: console.log
-//   },
-//   server: {
-//     port: 5000
-//   }
-// };
-
 
 // Khởi tạo Express app và Sequelize instance
 const app = express();
@@ -50,12 +33,13 @@ const sequelize = new Sequelize(
 );
 
 // Kiểm tra kết nối cơ sở dữ liệu
-sequelize.authenticate()
+sequelize
+  .authenticate()
   .then(() => {
-    console.log('Kết nối thành công với cơ sở dữ liệu MySQL');
+    console.log("Kết nối thành công với cơ sở dữ liệu MySQL");
   })
-  .catch(err => {
-    console.error('Lỗi kết nối:', err);
+  .catch((err) => {
+    console.error("Lỗi kết nối:", err);
   });
 
 module.exports = { app, sequelize, config };
