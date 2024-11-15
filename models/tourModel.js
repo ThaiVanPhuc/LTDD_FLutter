@@ -1,26 +1,24 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/config');
+// models/tourModel.js
+const mongoose = require("mongoose");
 
-// Định nghĩa model Tour với Sequelize
-const Tour = sequelize.define('Tour', {
+const tourSchema = new mongoose.Schema({
   cityName: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true,
   },
   days: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true,
   },
   price: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true,
   },
   avatar: {
-    type: DataTypes.STRING
-  }
-}, {
-  tableName: 'Tour',
-  timestamps: false  // Nếu không muốn sử dụng cột createdAt và updatedAt
+    type: String,
+  },
 });
+
+const Tour = mongoose.model("Tour", tourSchema);
 
 module.exports = Tour;

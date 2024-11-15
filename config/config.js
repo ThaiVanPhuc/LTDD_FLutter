@@ -1,45 +1,17 @@
-// Import các thư viện cần thiết
-const express = require("express");
-const bodyParser = require("body-parser");
-const { Sequelize } = require("sequelize");
+const mongoose = require("mongoose");
+require("dotenv").config(); // Nạp biến môi trường
+const mongoose = require("mongoose");
 
-// Cấu hình chung cho cơ sở dữ liệu và server
-const config = {
-  database: {
-    name: "fellow4U",
-    username: "root",
-    password: "",
-    host: "localhost",
-    dialect: "mysql",
-    logging: console.log,
-  },
-  server: {
-    port: 5000,
-  },
-};
-
-// Khởi tạo Express app và Sequelize instance
-const app = express();
-app.use(bodyParser.json());
-
-const sequelize = new Sequelize(
-  config.database.name,
-  config.database.username,
-  config.database.password,
-  {
-    host: config.database.host,
-    dialect: config.database.dialect,
+const connectDB = async () => {
+  try {
+    // Ket noi voi mongodb
+    await mongoose.connect(
+      "mongodb+srv://phuc100662:w5wVbrX6eaMKBsQu@cluster0.kkdpq.mongodb.net/flutter_db?retryWrites=true&w=majority&appName=Cluster0"
+    );
+    console.log("Connect successfully!!!");
+  } catch (error) {
+    console.log("Connect failure!!!", error);
+    process.exit(1);
   }
-);
-
-// Kiểm tra kết nối cơ sở dữ liệu
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Kết nối thành công với cơ sở dữ liệu MySQL");
-  })
-  .catch((err) => {
-    console.error("Lỗi kết nối:", err);
-  });
-
-module.exports = { app, sequelize, config };
+};
+module.exports = connectDB;
