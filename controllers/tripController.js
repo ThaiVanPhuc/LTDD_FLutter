@@ -2,7 +2,6 @@ const Trip = require("../models/tripModel");
 // Lấy tất cả các trip
 exports.getAllTrips = async (req, res) => {
   try {
-    // Lấy tất cả các trip từ database
     const Trips = await Trip.find();
     res.status(200).json(Trips);
   } catch (err) {
@@ -12,33 +11,48 @@ exports.getAllTrips = async (req, res) => {
 };
 // Thêm một trip mới
 exports.addTrip = async (req, res) => {
-  const { cityName, tripName, guestName, time } = req.body;
+  const { tripName, time, days, price, avatar } = req.body;
   try {
-    // Lưu trip mới vào database
-    const newTrip = new Trip({ cityName, tripName, guestName, time });
-    res.status(201).json(newTrip); // Tra ve du lieu Trip moi vua tao
+    if (!tripName || !time || !days || !price || !avatar) {
+      return res.status(400).json({ error: "Thiếu dữ liệu bắt buộc" });
+    }
+
+    const newTrip = new Trip({
+      tripName,
+      time,
+      days,
+      price,
+      avatar,
+    });
+
+    await newTrip.save();
+
+    res.status(201).json(newTrip);
   } catch (err) {
-    console.log("Lỗi khi thêm dữ iệu vào trip:", err);
+    console.log("Lỗi khi thêm dữ liệu vào trip:", err);
     res.status(500).json({ error: "Lỗi khi thêm dữ liệu" });
   }
 };
+
 // Cập nhật thông tin của một trip dựa trên ID
 exports.updateTrip = async (req, res) => {
   const { id } = req.params;
-  const { cityName, tripName, guestName, time } = req.body;
+  const { tripName, time, days, price, avatar } = req.body;
   try {
-    const trip = await Trip.findByIdAndUpdate(id);
+    const trip = await Trip.findById(id);
     if (!trip) {
       return res.status(404).json({ error: "Không tìm thấy trip" });
     }
-    // Cập nhật thông tin trip
-    trip.cityName = cityName || trip.cityName;
-    trip.tripName = tripName || trip.tripName;
-    trip.guestName = guestName || trip.guestName;
-    trip.time = time || trip.time;
-    await trip.save(); // Lưu thông tin trip đã cập nhật vào database
 
-    res.json(trip); // Trả về thông tin trip đã cập nhật
+    trip.tripName = tripName || trip.tripName;
+    trip.time = time || trip.time;
+    trip.days = days || trip.days;
+    trip.price = price || trip.price;
+    trip.avatar = avatar || trip.avatar;
+
+    await trip.save();
+
+    res.json(trip);
   } catch (err) {
     console.error("Lỗi khi cập nhật trip:", err);
     res.status(500).json({ error: "Lỗi khi cập nhật trip" });
@@ -47,9 +61,8 @@ exports.updateTrip = async (req, res) => {
 
 // Xóa một trip dựa trên ID
 exports.deleteTrip = async (req, res) => {
-  const { id } = req.params; // Lấy id của trip từ URL
+  const { id } = req.params;
   try {
-    // Tìm và xóa trip theo id
     const trip = await Trip.findByIdAndDelete(id);
     if (!trip) {
       return res.status(404).json({ error: "Không tìm thấy trip để xóa" });
