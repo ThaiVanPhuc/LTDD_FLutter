@@ -44,3 +44,19 @@ exports.updateTrip = async (req, res) => {
     res.status(500).json({ error: "Lỗi khi cập nhật trip" });
   }
 };
+
+// Xóa một trip dựa trên ID
+exports.deleteTrip = async (req, res) => {
+  const { id } = req.params; // Lấy id của trip từ URL
+  try {
+    // Tìm và xóa trip theo id
+    const trip = await Trip.findByIdAndDelete(id);
+    if (!trip) {
+      return res.status(404).json({ error: "Không tìm thấy trip để xóa" });
+    }
+    res.status(200).json({ message: "Trip đã được xóa thành công" });
+  } catch (err) {
+    console.error("Lỗi khi xóa trip:", err);
+    res.status(500).json({ error: "Lỗi khi xóa trip" });
+  }
+};

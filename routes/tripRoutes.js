@@ -8,5 +8,7 @@ router.get("/trips", tripController.getAllTrips);
 router.post("/trips", tripController.addTrip);
 // Cập nhật trip theo ID
 router.put("/trips/:id", tripController.updateTrip);
+// xóa trip theo ID
+router.delete("/trips/:id", tripController.deleteTrip);
 
 module.exports = router;
