@@ -4,11 +4,12 @@ const Trip = require("./models/tripModel"); // Import model Trip
 const path = require("path");
 const tripRoutes = require("./routes/tripRoutes");
 const userRoutes = require("./routes/userRoutes");
+const cors = require("cors");
 require("dotenv").config(); // Nạp biến môi trường từ .env
 
 const app = express();
 app.use(express.json());
-
+app.use(cors({}));
 // Cấu hình route
 app.use("/api", tripRoutes);
 app.use("/api/users", userRoutes);
